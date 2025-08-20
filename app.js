@@ -12,6 +12,8 @@ const passport = require('passport');
 
 var app = express();
 // view engine setup
+app.use(express.urlencoded({ extended: true })); // parses form data
+app.use(express.json()); // parses JSON data
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.use(expressSession({
@@ -22,8 +24,8 @@ app.use(expressSession({
 
 app.use(passport.initialize())
 app.use(passport.session())
-app.use(passport.serializeUser(usersRouter.serializeUser()))
-app.use(passport.deserializeUser(usersRouter.deserializeUser()))
+passport.serializeUser(usersRouter.serializeUser())
+passport.deserializeUser(usersRouter.deserializeUser())
 
 app.use(flash())
 app.use(logger('dev'));
@@ -50,5 +52,5 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-
+// app.use(express.urlencoded({ extended: true }));
 module.exports = app;
